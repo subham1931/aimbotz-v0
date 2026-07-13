@@ -85,6 +85,7 @@ export const STORE_ITEMS: StoreItem[] = [
     category: "hours",
     accent: "yellow",
     stock: 99,
+    image: "/images/store/1hr.png",
   },
   {
     id: "item-2hr",
@@ -94,6 +95,7 @@ export const STORE_ITEMS: StoreItem[] = [
     category: "hours",
     accent: "green",
     stock: 50,
+    image: "/images/store/2hr.png",
   },
   {
     id: "item-tee",
@@ -103,6 +105,7 @@ export const STORE_ITEMS: StoreItem[] = [
     category: "merch",
     accent: "orange",
     stock: 20,
+    image: "/images/store/tee.png",
   },
   {
     id: "item-snack",
@@ -112,6 +115,7 @@ export const STORE_ITEMS: StoreItem[] = [
     category: "snacks",
     accent: "red",
     stock: 100,
+    image: "/images/store/snack.png",
   },
   {
     id: "item-hood",
@@ -121,6 +125,7 @@ export const STORE_ITEMS: StoreItem[] = [
     category: "merch",
     accent: "blue",
     stock: 12,
+    image: "/images/store/hood.png",
   },
   {
     id: "item-vip",
@@ -130,6 +135,7 @@ export const STORE_ITEMS: StoreItem[] = [
     category: "vouchers",
     accent: "yellow",
     stock: 5,
+    image: "/images/store/vip.png",
   },
 ];
 

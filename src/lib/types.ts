@@ -64,6 +64,7 @@ export interface StoreItem {
   category: "hours" | "merch" | "snacks" | "vouchers";
   accent: "green" | "yellow" | "red" | "orange" | "blue";
   stock: number;
+  image?: string;
 }
 
 export interface Session {

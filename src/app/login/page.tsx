@@ -3,6 +3,7 @@
 import { FormEvent, useState, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Eye, EyeOff } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 
 function LoginForm() {
@@ -16,6 +17,7 @@ function LoginForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(
     authError ? "Authentication failed. Try again." : ""
   );
@@ -59,6 +61,9 @@ function LoginForm() {
       setOauthLoading(null);
     }
   }
+
+  const inputClass =
+    "w-full rounded-xl border border-white/10 bg-[#1a1a1a] px-4 py-3 text-white placeholder:text-white/35 outline-none focus:border-[#F5C518]/50";
 
   return (
     <div className="mx-auto max-w-md px-4 py-16">
@@ -106,7 +111,9 @@ function LoginForm() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="w-full rounded-xl border border-white/10 bg-[#1a1a1a] px-4 py-3 outline-none focus:border-[#F5C518]/50"
+              placeholder="Your display name"
+              autoComplete="name"
+              className={inputClass}
             />
           </div>
         )}
@@ -119,21 +126,41 @@ function LoginForm() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="w-full rounded-xl border border-white/10 bg-[#1a1a1a] px-4 py-3 outline-none focus:border-[#F5C518]/50"
+            placeholder="you@email.com"
+            autoComplete="email"
+            className={inputClass}
           />
         </div>
         <div>
           <label className="mb-1.5 block text-xs font-bold uppercase text-white/50">
             Password
           </label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            minLength={6}
-            className="w-full rounded-xl border border-white/10 bg-[#1a1a1a] px-4 py-3 outline-none focus:border-[#F5C518]/50"
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength={6}
+              placeholder={
+                mode === "signup" ? "At least 6 characters" : "Enter your password"
+              }
+              autoComplete={mode === "login" ? "current-password" : "new-password"}
+              className={`${inputClass} pr-12`}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((v) => !v)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 text-white/45 transition hover:text-[#F5C518]"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? (
+                <EyeOff className="h-5 w-5" />
+              ) : (
+                <Eye className="h-5 w-5" />
+              )}
+            </button>
+          </div>
         </div>
 
         {error && <p className="text-sm text-red-400">{error}</p>}
