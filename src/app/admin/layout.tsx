@@ -23,7 +23,7 @@ export default function AdminLayout({
     try {
       const u = await login(email, password);
       if (u.role !== "admin") {
-        logout();
+        await logout();
         setError("Admin credentials required");
       }
     } catch (err) {
@@ -112,8 +112,8 @@ export default function AdminLayout({
           </div>
           <button
             type="button"
-            onClick={() => {
-              logout();
+            onClick={async () => {
+              await logout();
               router.push("/");
             }}
             className="inline-flex items-center gap-1 text-xs text-white/50 hover:text-white"
