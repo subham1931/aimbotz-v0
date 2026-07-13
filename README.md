@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AimBotz — Arcade Booking Platform
 
-## Getting Started
+Responsive booking + loyalty web app for a physical gaming arcade. Users book hourly slots, receive QR tickets, earn coins from verified play, and redeem free hours or store rewards. Staff scan tickets in an admin dashboard.
 
-First, run the development server:
+## Stack
+
+- Next.js 16 (App Router) + TypeScript + Tailwind CSS v4
+- `qrcode.react` for ticket QR generation
+- `html5-qrcode` for admin camera scanning
+- File-backed JSON store (`data/db.json`) for demo persistence
+
+## Quick start
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Demo accounts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Role   | Email                  | Password  |
+|--------|------------------------|-----------|
+| Player | `sam@demo.local`       | (none)    |
+| Admin  | `admin@aimbotz.local`  | `admin123`|
 
-## Learn More
+## Coin rules (configurable)
 
-To learn more about Next.js, take a look at the following resources:
+Edit `src/lib/config.ts`:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `coinsPerHour` — earned after a session is completed
+- `coinsPerFreeHour` — cost to redeem 1 free hour voucher
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Routes
 
-## Deploy on Vercel
+- `/` — Homepage
+- `/book` — Booking wizard + QR ticket
+- `/tickets` — My tickets (fullscreen QR)
+- `/rewards` — Coin balance & redeem
+- `/leaderboard` — Full leaderboard + countdown
+- `/store` — Coin store
+- `/admin` — Staff dashboard
+- `/admin/scan` — QR scanner + verify
+- `/admin/sessions` — Today's sessions
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Flow
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Player logs in → books a station → gets QR ticket
+2. Staff opens `/admin/scan` → scans QR → **Verify & Start Session**
+3. Ticket becomes **Active** (single-use; re-scan rejected)
+4. Staff marks session **Complete** → coins credited to player ledger

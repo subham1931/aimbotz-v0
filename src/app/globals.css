@@ -1,26 +1,117 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0d0d0d;
+  --foreground: #ffffff;
+  --surface: #121212;
+  --surface-2: #1a1a1a;
+  --accent: #f5c518;
+  --accent-dim: #c9a014;
+  --muted: rgba(255, 255, 255, 0.55);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-accent: var(--accent);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body), system-ui, sans-serif;
+  min-height: 100vh;
+}
+
+.font-display {
+  font-family: var(--font-display), Impact, sans-serif;
+}
+
+/* Hero — image-driven synthwave scene */
+.hero-arcade {
+  background-color: #0a0010;
+  position: relative;
+}
+
+/* Notched CTAs matching reference (cut bottom-left corner) */
+.btn-hero-primary {
+  background: #f5c518;
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 100%,
+    14px 100%,
+    0 calc(100% - 14px)
+  );
+  box-shadow: 0 0 28px rgba(245, 197, 24, 0.35);
+}
+
+.btn-hero-secondary {
+  background: transparent;
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 100%,
+    14px 100%,
+    0 calc(100% - 14px)
+  );
+}
+
+@keyframes bounce-chevron {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateY(8px);
+    opacity: 1;
+  }
+}
+
+.animate-bounce-chevron {
+  animation: bounce-chevron 1.6s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    text-shadow: 0 0 12px rgba(245, 197, 24, 0.4);
+  }
+  50% {
+    text-shadow: 0 0 28px rgba(245, 197, 24, 0.8);
+  }
+}
+
+.glow-text {
+  animation: glow-pulse 2.5s ease-in-out infinite;
+}
+
+.card-surface {
+  background: linear-gradient(180deg, #1a1a1a 0%, #121212 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+}
+
+.neon-border {
+  border: 1px solid rgba(245, 197, 24, 0.35);
+  box-shadow: 0 0 24px rgba(245, 197, 24, 0.12);
+}
+
+.neon-border-blue {
+  border: 1px solid rgba(96, 165, 250, 0.45);
+  box-shadow: 0 0 28px rgba(59, 130, 246, 0.2);
 }
