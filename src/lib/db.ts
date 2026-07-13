@@ -1,6 +1,6 @@
 import { promises as fs } from "fs";
 import path from "path";
-import { createSeedDatabase } from "./seed";
+import { createSeedDatabase, STATIONS, STORE_ITEMS } from "./seed";
 import type { Database } from "./types";
 
 const DATA_DIR = path.join(process.cwd(), "data");
@@ -17,12 +17,22 @@ async function ensureDataDir() {
   }
 }
 
+/** Keep catalog fields (images, prices) in sync with seed — don't freeze old JSON. */
+function hydrateCatalog(db: Database): Database {
+  db.stations = STATIONS.map((s) => ({ ...s }));
+  db.storeItems = STORE_ITEMS.map((item) => {
+    const prev = db.storeItems?.find((i) => i.id === item.id);
+    return prev ? { ...item, stock: prev.stock } : { ...item };
+  });
+  return db;
+}
+
 export async function readDb(): Promise<Database> {
-  if (memoryCache) return memoryCache;
+  if (memoryCache) return hydrateCatalog(memoryCache);
   await ensureDataDir();
   try {
     const raw = await fs.readFile(DB_PATH, "utf-8");
-    memoryCache = JSON.parse(raw) as Database;
+    memoryCache = hydrateCatalog(JSON.parse(raw) as Database);
     return memoryCache;
   } catch {
     memoryCache = createSeedDatabase();

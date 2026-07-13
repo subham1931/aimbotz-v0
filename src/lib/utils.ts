@@ -83,37 +83,54 @@ export function createId(prefix: string): string {
 export function accentClasses(accent: string) {
   const map: Record<
     string,
-    { btn: string; glow: string; border: string; text: string }
+    {
+      btn: string;
+      btnSolid: string;
+      glow: string;
+      border: string;
+      text: string;
+      ring: string;
+    }
   > = {
     green: {
       btn: "bg-gradient-to-r from-emerald-600 to-emerald-400 text-black",
-      glow: "shadow-[0_0_24px_rgba(16,185,129,0.25)]",
+      btnSolid: "bg-[#22c55e] text-white",
+      glow: "shadow-[0_0_28px_rgba(34,197,94,0.35)]",
       border: "border-emerald-500/40",
-      text: "text-emerald-400",
+      text: "text-[#22c55e]",
+      ring: "ring-[#22c55e]/40",
     },
     yellow: {
       btn: "bg-gradient-to-r from-amber-500 to-[#F5C518] text-black",
-      glow: "shadow-[0_0_24px_rgba(245,197,24,0.3)]",
+      btnSolid: "bg-[#F5C518] text-black",
+      glow: "shadow-[0_0_28px_rgba(245,197,24,0.35)]",
       border: "border-[#F5C518]/40",
       text: "text-[#F5C518]",
+      ring: "ring-[#F5C518]/40",
     },
     red: {
       btn: "bg-gradient-to-r from-red-800 to-red-500 text-white",
-      glow: "shadow-[0_0_24px_rgba(239,68,68,0.25)]",
+      btnSolid: "bg-[#ef4444] text-black",
+      glow: "shadow-[0_0_28px_rgba(239,68,68,0.35)]",
       border: "border-red-500/40",
-      text: "text-red-400",
+      text: "text-[#ef4444]",
+      ring: "ring-[#ef4444]/40",
     },
     orange: {
       btn: "bg-gradient-to-r from-orange-700 to-orange-400 text-black",
-      glow: "shadow-[0_0_24px_rgba(249,115,22,0.25)]",
+      btnSolid: "bg-[#f97316] text-black",
+      glow: "shadow-[0_0_28px_rgba(249,115,22,0.35)]",
       border: "border-orange-500/40",
-      text: "text-orange-400",
+      text: "text-[#f97316]",
+      ring: "ring-[#f97316]/40",
     },
     blue: {
       btn: "bg-gradient-to-r from-blue-700 to-cyan-400 text-white",
-      glow: "shadow-[0_0_24px_rgba(59,130,246,0.25)]",
-      border: "border-blue-500/40",
-      text: "text-blue-400",
+      btnSolid: "bg-[#06b6d4] text-black",
+      glow: "shadow-[0_0_28px_rgba(6,182,212,0.35)]",
+      border: "border-cyan-500/40",
+      text: "text-[#22d3ee]",
+      ring: "ring-[#22d3ee]/40",
     },
   };
   return map[accent] ?? map.yellow;

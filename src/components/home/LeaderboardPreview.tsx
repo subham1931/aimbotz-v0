@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Crown } from "lucide-react";
 import { formatCoins, maskUsername } from "@/lib/utils";
@@ -10,32 +11,44 @@ type Entry = {
   rewardCoins: number;
 };
 
-const podiumStyles = [
-  {
-    // gold — center, tallest
+const PODIUM = {
+  1: {
     order: "order-1 md:order-2",
-    height: "md:pt-2",
-    footer: "bg-gradient-to-r from-amber-600 to-[#F5C518]",
-    scale: "md:scale-110 md:z-10",
-    crown: true,
+    scale: "md:scale-110 md:z-20",
+    padTop: "md:pt-0",
+    image: "/images/podium/gold.png",
+    tag: "Rank 1",
+    label: "Champion",
+    text: "text-[#F5C518]",
+    glow: "shadow-[0_0_28px_rgba(245,197,24,0.4)]",
+    btn: "bg-[#F5C518] text-black",
+    ring: "ring-[#F5C518]/50",
   },
-  {
-    // silver — left
+  2: {
     order: "order-2 md:order-1",
-    height: "md:pt-8",
-    footer: "bg-gradient-to-r from-slate-500 to-slate-300",
-    scale: "",
-    crown: false,
+    scale: "md:z-10",
+    padTop: "md:pt-10",
+    image: "/images/podium/silver.png",
+    tag: "Rank 2",
+    label: "Runner Up",
+    text: "text-slate-300",
+    glow: "shadow-[0_0_28px_rgba(148,163,184,0.35)]",
+    btn: "bg-gradient-to-r from-slate-400 to-slate-200 text-black",
+    ring: "ring-slate-300/50",
   },
-  {
-    // bronze — right
+  3: {
     order: "order-3 md:order-3",
-    height: "md:pt-8",
-    footer: "bg-gradient-to-r from-amber-800 to-amber-600",
-    scale: "",
-    crown: false,
+    scale: "md:z-10",
+    padTop: "md:pt-10",
+    image: "/images/podium/bronze.png",
+    tag: "Rank 3",
+    label: "Bronze",
+    text: "text-amber-600",
+    glow: "shadow-[0_0_28px_rgba(180,83,9,0.35)]",
+    btn: "bg-gradient-to-r from-amber-800 to-amber-500 text-black",
+    ring: "ring-amber-600/50",
   },
-];
+} as const;
 
 export function LeaderboardPreview({
   top3,
@@ -44,71 +57,95 @@ export function LeaderboardPreview({
   top3: Entry[];
   nextResetAt: string;
 }) {
-  // Ensure order: rank2, rank1, rank3 for desktop podium visual
   const ordered = [top3[1], top3[0], top3[2]].filter(Boolean);
-  const stylesFor = (rank: number) =>
-    podiumStyles[rank === 1 ? 0 : rank === 2 ? 1 : 2];
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
-      <div className="mb-10 flex items-center justify-center gap-2">
+      <div className="mb-14 flex items-center justify-center gap-2">
         <Crown className="h-6 w-6 text-[#F5C518]" />
         <h2 className="font-display text-3xl font-extrabold uppercase tracking-wide text-white sm:text-4xl">
           Leaderboard
         </h2>
       </div>
 
-      <div className="mx-auto flex max-w-3xl flex-col items-stretch gap-4 md:flex-row md:items-end md:justify-center md:gap-3">
+      <div className="mx-auto flex max-w-4xl flex-col items-stretch gap-16 md:flex-row md:items-end md:justify-center md:gap-4">
         {ordered.map((entry) => {
           if (!entry) return null;
-          const style = stylesFor(entry.rank);
+          const style = PODIUM[entry.rank as 1 | 2 | 3] ?? PODIUM[3];
+          const initial = entry.user.name.slice(0, 1).toUpperCase();
+
           return (
-            <div
+            <article
               key={entry.user.id}
-              className={`card-surface flex flex-1 flex-col overflow-hidden ${style.order} ${style.height} ${style.scale}`}
+              className={`group relative flex flex-1 flex-col pt-[7.5rem] ${style.order} ${style.padTop} ${style.scale}`}
             >
-              <div className="flex flex-col items-center px-4 py-6">
-                {style.crown && (
-                  <Crown className="mb-2 h-5 w-5 text-[#F5C518]" />
-                )}
-                <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-full border-2 border-[#F5C518]/50 bg-[#1a1a1a] text-lg font-bold text-[#F5C518]">
-                  {entry.user.name.slice(0, 1).toUpperCase()}
+              <div className="pointer-events-none absolute inset-x-0 -top-2 z-30 flex justify-center">
+                <div className="relative h-40 w-40 transition duration-300 group-hover:-translate-y-2 group-hover:scale-105 sm:h-48 sm:w-48">
+                  <Image
+                    src={style.image}
+                    alt={`Rank ${entry.rank} trophy`}
+                    fill
+                    sizes="192px"
+                    className="object-contain drop-shadow-[0_16px_32px_rgba(0,0,0,0.75)]"
+                    priority
+                  />
                 </div>
-                <p className="font-display text-lg font-bold tracking-wide text-white">
-                  {maskUsername(entry.user.name)}
-                </p>
-                <p className="mt-1 text-sm text-white/50">
-                  {entry.user.totalHours}h played
-                </p>
-                <p className="mt-2 font-display text-2xl font-bold text-white">
-                  {formatCoins(entry.user.coins)}{" "}
-                  <span className="text-xs text-white/40">COINS</span>
-                </p>
               </div>
+
               <div
-                className={`${style.footer} py-2.5 text-center text-sm font-bold text-black`}
+                className={`station-card relative z-10 flex flex-1 flex-col bg-[#141414] ${style.glow}`}
               >
-                Prize · {formatCoins(entry.rewardCoins)} coins
+                <div className="flex flex-1 flex-col items-center px-4 pb-6 pt-14 text-center sm:pt-16">
+                  <p
+                    className={`text-[11px] font-bold uppercase tracking-[0.28em] ${style.text}`}
+                  >
+                    {style.tag}
+                  </p>
+
+                  <div
+                    className={`relative mt-3 mb-2 flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-[#1a1a1a] text-lg font-bold ring-2 ${style.ring} ${style.text}`}
+                  >
+                    {entry.user.avatar ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={entry.user.avatar}
+                        alt=""
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      initial
+                    )}
+                    {entry.rank === 1 && (
+                      <Crown className="absolute -top-3 left-1/2 h-4 w-4 -translate-x-1/2 text-[#F5C518]" />
+                    )}
+                  </div>
+
+                  <h3 className="font-display text-2xl font-extrabold uppercase tracking-wide text-white">
+                    {maskUsername(entry.user.name)}
+                  </h3>
+                  <p className={`mt-1 text-xs font-bold uppercase ${style.text}`}>
+                    {style.label} · {entry.user.totalHours}h played
+                  </p>
+                  <p className="mt-3 font-display text-3xl font-extrabold text-white">
+                    {formatCoins(entry.user.coins)}
+                  </p>
+                  <p className="text-[11px] uppercase tracking-wider text-white/35">
+                    Coins earned
+                  </p>
+                </div>
+
+                <div
+                  className={`py-3 text-center text-sm font-extrabold uppercase tracking-[0.15em] ${style.btn}`}
+                >
+                  Prize · {formatCoins(entry.rewardCoins)} coins
+                </div>
               </div>
-            </div>
+            </article>
           );
         })}
       </div>
 
-      {/* Mobile single-card fallback when fewer than 3 — also show MORE */}
-      {top3.length === 1 && (
-        <div className="mx-auto mt-4 max-w-xs card-surface p-6 text-center md:hidden">
-          <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full border-2 border-[#F5C518]/50 bg-[#1a1a1a] text-lg font-bold text-[#F5C518]">
-            {top3[0].user.name.slice(0, 1)}
-          </div>
-          <p className="font-bold">{maskUsername(top3[0].user.name)}</p>
-          <p className="text-[#F5C518]">
-            {formatCoins(top3[0].user.coins)} COINS
-          </p>
-        </div>
-      )}
-
-      <div className="mt-10 flex justify-center">
+      <div className="mt-12 flex justify-center">
         <Link
           href="/leaderboard"
           className="inline-flex min-w-[200px] items-center justify-center rounded-full bg-[#F5C518] px-8 py-3 text-sm font-bold uppercase tracking-wider text-black hover:brightness-110"

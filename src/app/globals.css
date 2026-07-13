@@ -115,3 +115,18 @@ body {
   border: 1px solid rgba(96, 165, 250, 0.45);
   box-shadow: 0 0 28px rgba(59, 130, 246, 0.2);
 }
+
+/* Promo station cards — beveled industrial corners like reference */
+.station-card {
+  clip-path: polygon(
+    18px 0,
+    calc(100% - 18px) 0,
+    100% 18px,
+    100% calc(100% - 18px),
+    calc(100% - 18px) 100%,
+    18px 100%,
+    0 calc(100% - 18px),
+    0 18px
+  );
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}

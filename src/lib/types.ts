@@ -7,6 +7,10 @@ export interface Station {
   name: string;
   slug: string;
   description: string;
+  /** Small accent label e.g. HOURLY / FEATURED */
+  tag?: string;
+  /** Large center headline e.g. price or offer */
+  highlight?: string;
   pricePerHour: number;
   icon: string;
   accent: "green" | "yellow" | "red" | "orange" | "blue";
